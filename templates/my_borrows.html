@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Borrowed Books</title>
+</head>
+<body>
+    <h2>My Borrowed Books</h2>
+
+    <table border="1">
+        <tr>
+            <th>Book Name</th>
+            <th>Borrow Date</th>
+            <th>Status</th>
+            <th>Fine</th>
+            <th>Action</th>
+        </tr>
+
+        {% for item in borrows %}
+        <tr>
+            <td>{{ item["name"] }}</td>
+            <td>{{ item["borrow_date"] }}</td>
+            <td>{{ item["status"] }}</td>
+            <td>₹{{ item["fine"] }}</td>
+            <td>
+                {% if item["status"] == "returned" and item["fine"] > 0 %}
+                    <a href="/create_order/{{ item['borrow_id'] }}">Pay Fine</a>
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+    <a href="/books">Back to Books</a>
+</body>
+</html>

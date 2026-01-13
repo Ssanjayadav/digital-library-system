@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pay Fine</title>
+</head>
+<body>
+    <h2>Pay Fine</h2>
+
+    <p>Amount: ₹{{ amount }}</p>
+
+    <form method="POST">
+        <label>Select Payment Method:</label><br><br>
+
+        <input type="radio" name="method" value="UPI" required> UPI<br>
+        <input type="radio" name="method" value="Card" required> Card<br>
+        <input type="radio" name="method" value="Wallet" required> Wallet<br><br>
+
+        <button type="submit">Pay Now</button>
+    </form>
+</body>
+</html>
