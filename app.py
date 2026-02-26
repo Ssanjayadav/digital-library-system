@@ -29,8 +29,11 @@ app = Flask(__name__)
  # used for sessions
 
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
+if not app.secret_key:
+    raise ValueError("FLASK_SECRET_KEY is not set in environment variables")
 client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
-
+if not RAZORPAY_KEY_ID or not RAZORPAY_KEY_SECRET:
+    raise ValueError("Razorpay keys are not set in environment variables")
 
 
 
@@ -302,9 +305,10 @@ def pay_fine(borrow_id):
 
 
 @app.route("/create_order/<int:borrow_id>")
+@login_required(role="student")
 def create_order(borrow_id):
-    if session.get("role") != "student":
-        return "Access denied"
+    # if session.get("role") != "student":
+    #     return "Access denied"
 
     conn = get_connection()
     cursor = conn.cursor()
@@ -377,7 +381,7 @@ def verify_payment():
     try:
         client.utility.verify_payment_signature(params_dict)
     except razorpay.errors.SignatureVerificationError:
-     return "Payment verification failed!"
+        return "Payment verification failed!"
 
     # Now safe to update DB
     user_id = session.get("user_id")
@@ -436,6 +440,7 @@ def admin_payments():
     return render_template("admin_payments.html", payments=payments)
 
 @app.route("/logout")
+@login_required()
 def logout():
     session.clear()
     return redirect(url_for("home"))
