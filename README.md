@@ -1,4 +1,4 @@
-# 📚 Digital Library Management System
+# 📚 Digital Library System
 
 
 A full-stack **Flask-based Library Management System** that automates book circulation, fine calculation, and secure online fine payment using **Razorpay** with **role-based authentication**.
