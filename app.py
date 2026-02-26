@@ -6,8 +6,8 @@ from config import RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET
 import random
 import bcrypt
 from functools import wraps
-
-
+import os
+import razorpay.errors
 
 def login_required(role=None):
     def decorator(f):
@@ -25,7 +25,10 @@ def login_required(role=None):
 
 
 app = Flask(__name__)
-app.secret_key = "supersecretkey"  # used for sessions
+
+ # used for sessions
+
+app.secret_key = os.getenv("FLASK_SECRET_KEY")
 client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
 
 
@@ -143,8 +146,8 @@ def view_books():
 @login_required(role="student")
 def borrow_book(book_id):
     # Only students can borrow
-    if session.get("role") != "student":
-        return "Only students can borrow books."
+    # if session.get("role") != "student":
+    #     return "Only students can borrow books."
 
     user_id = session.get("user_id")
 
@@ -189,9 +192,10 @@ def borrow_book(book_id):
     return redirect(url_for("view_books"))
 
 @app.route("/my_borrows")
+@login_required(role="student")
 def my_borrows():
-    if session.get("role") != "student":
-        return "Access denied."
+    # if session.get("role") != "student":
+    #     return "Access denied."
 
     user_id = session.get("user_id")
 
@@ -252,9 +256,10 @@ def return_book(borrow_id):
     return f"Book returned successfully. Fine: ₹{fine}"
 
 @app.route("/pay_fine/<int:borrow_id>", methods=["GET", "POST"])
+@login_required(role="student")
 def pay_fine(borrow_id):
-    if session.get("role") != "student":
-        return "Access denied."
+    # if session.get("role") != "student":
+    #     return "Access denied."
 
     conn = get_connection()
     cursor = conn.cursor()
@@ -371,8 +376,8 @@ def verify_payment():
 
     try:
         client.utility.verify_payment_signature(params_dict)
-    except:
-        return "Payment verification failed!"
+    except razorpay.errors.SignatureVerificationError:
+     return "Payment verification failed!"
 
     # Now safe to update DB
     user_id = session.get("user_id")
@@ -399,9 +404,10 @@ def verify_payment():
 
 
 @app.route("/payment_history")
+@login_required(role="student")
 def payment_history():
-    if session.get("role") != "student":
-        return "Access denied"
+    # if session.get("role") != "student":
+    #     return "Access denied"
 
     user_id = session.get("user_id")
 
@@ -418,8 +424,8 @@ def payment_history():
 @app.route("/admin_payments")
 @login_required(role="librarian")
 def admin_payments():
-    if session.get("role") != "librarian":
-        return "Access denied"
+    # if session.get("role") != "librarian":
+    #     return "Access denied"
 
     conn = get_connection()
     cursor = conn.cursor()
