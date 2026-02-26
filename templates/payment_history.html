@@ -1,32 +1,27 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Payment History</title>
-</head>
-<body>
-    <h2>My Payment History</h2>
+{% extends "base.html" %}
 
-    <table border="1">
-        <tr>
-            <th>Amount</th>
-            <th>Method</th>
-            <th>Transaction ID</th>
-            <th>Date</th>
-            <th>Status</th>
-        </tr>
+{% block title %}Payment History{% endblock %}
 
-        {% for p in payments %}
-        <tr>
-            <td>₹{{ p["amount"] }}</td>
-            <td>{{ p["method"] }}</td>
-            <td>{{ p["transaction_id"] }}</td>
-            <td>{{ p["date"] }}</td>
-            <td>{{ p["status"] }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+{% block content %}
+<h2>My Payment History</h2>
 
-    <br>
-    <a href="/books">Back</a>
-</body>
-</html>
+<table border="1">
+    <tr>
+        <th>Amount</th>
+        <th>Method</th>
+        <th>Transaction ID</th>
+        <th>Date</th>
+        <th>Status</th>
+    </tr>
+
+    {% for p in payments %}
+    <tr>
+        <td>₹{{ p["amount"] }}</td>
+        <td>{{ p["method"] }}</td>
+        <td>{{ p["transaction_id"] }}</td>
+        <td>{{ p["date"] }}</td>
+        <td>{{ p["status"] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

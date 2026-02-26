@@ -1,38 +1,36 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>My Borrowed Books</title>
-</head>
-<body>
-    <h2>My Borrowed Books</h2>
+{% extends "base.html" %}
 
-    <table border="1">
-        <tr>
-            <th>Book Name</th>
-            <th>Borrow Date</th>
-            <th>Status</th>
-            <th>Fine</th>
-            <th>Action</th>
-        </tr>
+{% block title %}My Borrowed Books{% endblock %}
 
-        {% for item in borrows %}
-        <tr>
-            <td>{{ item["name"] }}</td>
-            <td>{{ item["borrow_date"] }}</td>
-            <td>{{ item["status"] }}</td>
-            <td>₹{{ item["fine"] }}</td>
-            <td>
-                {% if item["status"] == "returned" and item["fine"] > 0 %}
-                    <a href="/create_order/{{ item['borrow_id'] }}">Pay Fine</a>
-                {% else %}
-                    -
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+{% block content %}
+<h2>My Borrowed Books</h2>
 
-    <br>
-    <a href="/books">Back to Books</a>
-</body>
-</html>
+<table border="1">
+    <tr>
+        <th>Book Name</th>
+        <th>Borrow Date</th>
+        <th>Status</th>
+        <th>Fine</th>
+        <th>Action</th>
+    </tr>
+
+    {% for item in borrows %}
+    <tr>
+        <td>{{ item["name"] }}</td>
+        <td>{{ item["borrow_date"] }}</td>
+        <td>{{ item["status"] }}</td>
+        <td>₹{{ item["fine"] if item["fine"] else 0 }}</td>
+
+        <td>
+            {% if item["status"] == "borrowed" %}
+                <a href="/return/{{ item['borrow_id'] }}">Return</a>
+            {% elif item["status"] == "returned" and item["fine"] > 0 %}
+                <a href="/create_order/{{ item['borrow_id'] }}">Pay Fine</a>
+            {% else %}
+                -
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

@@ -1,11 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Library System</title>
-</head>
-<body>
-    <h1>Welcome to Library Management System</h1>
-    <a href="/register">Register</a> |
-    <a href="/login">Login</a>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h2>Welcome to the Library Management System</h2>
+
+<p>This system allows students to borrow books, return them, pay fines online, and track transactions.</p>
+
+{% if not session.get("user_id") %}
+    <a href="/login">Login</a> | <a href="/register">Register</a>
+{% endif %}
+{% endblock %}

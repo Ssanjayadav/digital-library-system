@@ -42,7 +42,8 @@ def register():
         email = request.form["email"]
         # password = request.form["password"]
         raw_password = request.form["password"]
-        hashed_password = bcrypt.hashpw(raw_password.encode('utf-8'), bcrypt.gensalt())
+        hashed_password = bcrypt.hashpw(raw_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+
 
         role = request.form["role"]
 
@@ -74,7 +75,7 @@ def login():
 
         conn.close()
 
-        if user and bcrypt.checkpw(password.encode('utf-8'), user["password"]):
+        if user and bcrypt.checkpw(password.encode('utf-8'), user["password"].encode('utf-8')):
             session["user_id"] = user["id"]
             session["role"] = user["role"]
             session["name"] = user["name"]
@@ -92,12 +93,14 @@ def login():
 @app.route("/student")
 @login_required(role="student")
 def student_dashboard():
-    return f"Welcome Student: {session.get('name')}"
+    return render_template("student_dashboard.html")
+
 
 @app.route("/librarian")
 @login_required(role="librarian")
 def librarian_dashboard():
-    return f"Welcome Librarian: {session.get('name')}"
+    return render_template("librarian_dashboard.html")
+
 
 
 @app.route("/add_book", methods=["GET", "POST"])
@@ -212,17 +215,12 @@ def my_borrows():
     return render_template("my_borrows.html", borrows=borrows)
 
 
-
 @app.route("/return/<int:borrow_id>")
 @login_required(role="student")
 def return_book(borrow_id):
-    if session.get("role") != "student":
-        return "Only students can return books."
-
     conn = get_connection()
     cursor = conn.cursor()
 
-    # Get borrow record
     cursor.execute("SELECT * FROM borrows WHERE id = ?", (borrow_id,))
     borrow = cursor.fetchone()
 
@@ -234,26 +232,19 @@ def return_book(borrow_id):
     borrow_date = datetime.strptime(borrow["borrow_date"], "%Y-%m-%d")
     return_date = datetime.now()
 
-    # Calculate days difference
     days_borrowed = (return_date - borrow_date).days
 
     fine = 0
     if days_borrowed > 7:
-        fine = (days_borrowed - 7) * 10  # ₹10 per extra day
+        fine = (days_borrowed - 7) * 10
 
-    return_date_str = return_date.strftime("%Y-%m-%d")
-
-    # Update borrow record
     cursor.execute("""
         UPDATE borrows 
         SET status = 'returned', return_date = ?, fine = ?
         WHERE id = ?
-    """, (return_date_str, fine, borrow_id))
+    """, (return_date.strftime("%Y-%m-%d"), fine, borrow_id))
 
-    # Increase book copies
-    cursor.execute("""
-        UPDATE books SET copies = copies + 1 WHERE id = ?
-    """, (book_id,))
+    cursor.execute("UPDATE books SET copies = copies + 1 WHERE id = ?", (book_id,))
 
     conn.commit()
     conn.close()

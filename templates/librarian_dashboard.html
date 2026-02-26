@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Librarian Dashboard{% endblock %}
+
+{% block content %}
+<h2>Welcome, {{ session.get("name") }}</h2>
+
+<ul>
+    <li><a href="/books">View Books</a></li>
+    <li><a href="/add_book">Add Book</a></li>
+    <li><a href="/admin_payments">View Payments</a></li>
+</ul>
+{% endblock %}
