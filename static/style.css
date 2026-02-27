@@ -145,3 +145,13 @@ form input:focus, form select:focus {
     color: #666;
     font-size: 14px;
 }
+.error-msg {
+    color: #e74c3c;
+    background-color: #fdecea;
+    padding: 10px;
+    border: 1px solid #e74c3c;
+    border-radius: 5px;
+    width: fit-content;
+    margin-bottom: 15px;
+    font-weight: 500;
+}

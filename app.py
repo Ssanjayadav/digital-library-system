@@ -1,13 +1,19 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-from database import get_connection
-from datetime import datetime
-import razorpay
-from config import RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET
-import random
-import bcrypt
 from functools import wraps
+from datetime import datetime
+
+from sqlite3 import IntegrityError
+import bcrypt
+
 import os
+import random
+
+import bcrypt
+import razorpay
 import razorpay.errors
+
+from database import get_connection
+from config import RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET
 
 def login_required(role=None):
     def decorator(f):
@@ -46,25 +52,35 @@ def register():
     if request.method == "POST":
         name = request.form["name"]
         email = request.form["email"]
-        # password = request.form["password"]
-        raw_password = request.form["password"]
-        hashed_password = bcrypt.hashpw(raw_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-
-
+        password = request.form["password"]
+        # raw_password = request.form["password"]
         role = request.form["role"]
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
         conn = get_connection()
         cursor = conn.cursor()
-        cursor.execute(
-          "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)",
-            (name, email, hashed_password, role)
-        )
 
-        conn.commit()
-        conn.close()
+        try:
+            cursor.execute("""
+                   INSERT INTO users (name, email, password, role) VALUES (?,?,?,?)
+                           """, (name, email, hashed_password,role))
+            conn.commit()
+            conn.close()
 
-        return redirect(url_for("login"))
+        # cursor.execute(
+        #   "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)",
+        #     (name, email, hashed_password, role)
+        # )
 
+            return redirect(url_for("login"))
+        
+        except IntegrityError:
+          conn.close()
+          return render_template(
+                "register.html",
+                error="Email already exists"
+            )
+    
     return render_template("register.html")
 
 @app.route("/login", methods=["GET", "POST"])
@@ -93,7 +109,7 @@ def login():
         else:
             return "Invalid email or password"
 
-    return render_template("login.html")
+    return render_template("login.html", erro="Email already exists")
 
 
 @app.route("/student")
