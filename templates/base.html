@@ -2,8 +2,9 @@
 <html>
 <head>
     <title>{% block title %}Library System{% endblock %}</title>
+   
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
+ <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -31,9 +32,16 @@
         }
     </style>
 </head>
-<body>
+<body class="layout">
 
     <div class="navbar">
+
+    <div class="nav-left">
+        <a href="/">LMS</a>
+    </div>
+
+    <div class="nav-right">
+
         {% if session.get("user_id") %}
             <a href="/books">Books</a>
 
@@ -49,11 +57,13 @@
 
             <a href="/logout">Logout</a>
         {% else %}
-            <a href="/">Home</a>
             <a href="/login">Login</a>
             <a href="/register">Register</a>
         {% endif %}
+
     </div>
+
+</div>
 
     <div class="container">
         {% block content %}{% endblock %}

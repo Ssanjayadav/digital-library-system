@@ -3,11 +3,23 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<h2>Welcome to the Library Management System</h2>
 
-<p>This system allows students to borrow books, return them, pay fines online, and track transactions.</p>
+<div class="landing">
 
-{% if not session.get("user_id") %}
-    <a href="/login">Login</a> | <a href="/register">Register</a>
-{% endif %}
+    <div>
+        <h2>Welcome to the Library Management System</h2>
+
+        <p>
+            This system allows students to borrow books, return them,
+            pay fines online, and track transactions.
+        </p>
+
+        {% if not session.get("user_id") %}
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+        {% endif %}
+    </div>
+
+</div>
+
 {% endblock %}
