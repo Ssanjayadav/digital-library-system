@@ -1,13 +1,41 @@
 {% extends "base.html" %}
-
 {% block title %}Student Dashboard{% endblock %}
 
 {% block content %}
-<h2>Welcome, {{ session.get("name") }}</h2>
 
-<ul>
-    <li><a href="/books">Browse Books</a></li>
-    <li><a href="/my_borrows">My Borrowed Books</a></li>
-    <li><a href="/payment_history">Payment History</a></li>
-</ul>
+<div class="landing">
+
+    <div class="dashboard-card">
+
+        <h2 class="dashboard-title">
+            Welcome, {{ session.get("name") }}
+        </h2>
+
+        <p class="dashboard-subtitle">
+            Manage your library activity from here
+        </p>
+
+        <div class="dashboard-actions">
+
+            <a href="/books" class="dash-btn">
+                <i class="bi bi-book"></i>
+                <span>Browse Books</span>
+            </a>
+
+            <a href="/my_borrows" class="dash-btn">
+                <i class="bi bi-journal-check"></i>
+                <span>My Borrowed Books</span>
+            </a>
+
+            <a href="/payment_history" class="dash-btn">
+                <i class="bi bi-credit-card"></i>
+                <span>Payment History</span>
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
 {% endblock %}

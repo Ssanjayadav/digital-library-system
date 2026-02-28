@@ -1,35 +1,54 @@
 {% extends "base.html" %}
-
 {% block title %}Books{% endblock %}
 
 {% block content %}
-<h2>All Books</h2>
 
-<table border="1">
-    <tr>
-        <th>Name</th>
-        <th>Author</th>
-        <th>Publisher</th>
-        <th>Category</th>
-        <th>Copies</th>
-        <th>Action</th>
-    </tr>
+<div class="books-page">
 
-    {% for book in books %}
-    <tr>
-        <td>{{ book["name"] }}</td>
-        <td>{{ book["author"] }}</td>
-        <td>{{ book["publisher"] }}</td>
-        <td>{{ book["category"] }}</td>
-        <td>{{ book["copies"] }}</td>
-        <td>
-            {% if book["copies"] > 0 and session.get("role") == "student" %}
-                <a href="/borrow/{{ book['id'] }}">Borrow</a>
+    <!--  SEARCH BAR -->
+    <div class="books-header">
+        <input type="text" id="bookSearch" placeholder="Search books...">
+    </div>
+
+    <!-- BOOK GRID -->
+    <div class="book-grid">
+
+        {% for book in books %}
+        <div class="book-card">
+
+            <div class="book-icon">
+                <i class="bi bi-book"></i>
+            </div>
+
+            <h3>{{ book["name"] }}</h3>
+            <p class="book-author">{{ book["author"] }}</p>
+
+            <p class="book-meta">{{ book["publisher"] }}</p>
+            <p class="book-meta">{{ book["category"] }}</p>
+
+            {% if book["copies"] > 0 %}
+                <span class="badge available">Available</span>
             {% else %}
-                -
+                <span class="badge issued">Not Available</span>
             {% endif %}
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+
+            {% if book["borrowed_count"] > 0 %}
+                <p class="borrowed-count">
+                    Borrowed: {{ book["borrowed_count"] }}
+                </p>
+            {% endif %}
+
+            {% if book["copies"] > 0 and session.get("role") == "student" %}
+                <a href="/borrow/{{ book['id'] }}" class="borrow-btn">
+                    Borrow
+                </a>
+            {% endif %}
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+
 {% endblock %}

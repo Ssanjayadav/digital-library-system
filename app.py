@@ -156,7 +156,24 @@ def view_books():
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM books")
     books = cursor.fetchall()
+    
+
+    user_id = session.get("user_id")
+
+    cursor.execute("""
+     SELECT books.*,
+COUNT(borrows.id) AS borrowed_count
+FROM books
+LEFT JOIN borrows
+ON borrows.book_id = books.id
+AND borrows.user_id = ?
+AND borrows.status = 'borrowed'
+GROUP BY books.id
+""", (user_id,))
+
+    books = cursor.fetchall()
     conn.close()
+
 
     return render_template("books.html", books=books)
 
