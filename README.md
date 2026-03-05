@@ -79,8 +79,7 @@ It demonstrates real-world backend concepts:
 ### Payment Gateway
 - Razorpay
 
-📂 Project Structure
-
+```text
 digital-library-system/
 │
 ├── app.py                 # Main Flask application
@@ -99,6 +98,8 @@ digital-library-system/
 │
 └── static/
     └── style.css
+```
+
 
         
 
