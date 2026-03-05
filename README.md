@@ -79,28 +79,27 @@ It demonstrates real-world backend concepts:
 ### Payment Gateway
 - Razorpay
 
-## 📂 Project Structure
+📂 Project Structure
 
 digital-library-system/
-├── app.py                # Main Flask application
-├── config.py            # Environment & Razorpay configuration
-├── database.py          # Database connection
-├── init_db.py           # Database initialization
+│
+├── app.py                 # Main Flask application
+├── config.py              # Environment & Razorpay configuration
+├── database.py            # Database connection
+├── init_db.py             # Database initialization
 ├── requirements.txt
 ├── .env.example
 │
-├── templates/           # Jinja2 templates
+├── templates/             # Jinja2 templates
 │   ├── base.html
 │   ├── login.html
 │   ├── register.html
 │   ├── student_dashboard.html
-│   ├── librarian_dashboard.html
-│   └── ...
+│   └── librarian_dashboard.html
 │
-├── static/              # CSS 
-│   ├── style.css
-│   
-│
+└── static/
+    └── style.css
+
         
 
 ## ⚙️ Environment Variables
