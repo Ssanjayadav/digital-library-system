@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Library System | Authentication</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Poppins, sans-serif;
+}
+
+body {
+    background: #f4f6f9;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    display: flex;
+    width: 900px;
+    height: 520px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+/* LEFT PANEL */
+
+.left {
+    width: 45%;
+    background: #111827;
+    color: white;
+    padding: 60px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.left h1 {
+    font-size: 32px;
+    margin-bottom: 15px;
+}
+
+.left p {
+    font-size: 14px;
+    color: #d1d5db;
+}
+
+/* RIGHT PANEL */
+
+.right {
+    width: 55%;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.right h2 {
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+.input-group {
+    margin-bottom: 18px;
+}
+
+.input-group label {
+    font-size: 13px;
+    display: block;
+    margin-bottom: 6px;
+    color: #374151;
+}
+
+.input-group input,
+.input-group select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+    outline: none;
+    border-color: #111827;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #111827;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+button:hover {
+    background: #1f2937;
+}
+
+.switch {
+    margin-top: 18px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.switch a {
+    color: #111827;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Hide register form initially */
+#registerForm {
+    display: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="left">
+        <h1>Library System</h1>
+        <p id="leftText">
+            Manage books, borrows and payments efficiently.
+        </p>
+    </div>
+
+    <div class="right">
+
+        <!-- LOGIN FORM -->
+        <div id="loginForm">
+            <h2>Login</h2>
+
+            <form method="POST" action="/login">
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" name="email" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" name="password" required>
+                </div>
+
+                <button type="submit">Login</button>
+            </form>
+
+            <div class="switch">
+                Don't have an account?
+                <a onclick="showRegister()">Register</a>
+            </div>
+        </div>
+
+
+        <!-- REGISTER FORM -->
+        <div id="registerForm">
+            <h2>Create Account</h2>
+
+            <form method="POST" action="/register">
+                <div class="input-group">
+                    <label>Name</label>
+                    <input type="text" name="name" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" name="email" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" name="password" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Role</label>
+                    <select name="role" required>
+                        <option value="student">Student</option>
+                        <option value="librarian">Librarian</option>
+                    </select>
+                </div>
+
+                <button type="submit">Register</button>
+            </form>
+
+            <div class="switch">
+                Already have an account?
+                <a onclick="showLogin()">Login</a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+function showRegister() {
+    document.getElementById("loginForm").style.display = "none";
+    document.getElementById("registerForm").style.display = "block";
+    document.getElementById("leftText").innerText =
+        "Create your account to start borrowing and managing books.";
+}
+
+function showLogin() {
+    document.getElementById("registerForm").style.display = "none";
+    document.getElementById("loginForm").style.display = "block";
+    document.getElementById("leftText").innerText =
+        "Manage books, borrows and payments efficiently.";
+}
+</script>
+
+</body>
+</html>

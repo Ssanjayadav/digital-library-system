@@ -552,3 +552,14 @@ html, body {
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 25px;
 }
+
+
+.msg-div{
+width: auto;
+height: 20px;
+padding: 5px;
+margin: 5px;
+}
+.msg{
+    color: #15803d;
+}

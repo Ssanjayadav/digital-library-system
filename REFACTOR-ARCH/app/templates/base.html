@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Library Dashboard{% endblock %}</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Poppins, sans-serif;
+        }
+
+        body {
+            background: #f4f6f9;
+        }
+
+        .container {
+            display: flex;
+        }
+
+        .sidebar {
+            width: 230px;
+            height: 100vh;
+            background: #111827;
+            color: #fff;
+            padding: 20px;
+        }
+
+        .logo {
+            margin-bottom: 30px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar ul li {
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .sidebar ul li:hover,
+        .active {
+            background: #1f2937;
+        }
+
+        .main {
+            flex: 1;
+            padding: 25px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        /* Sidebar collapsed */
+        .sidebar.collapsed {
+            width: 70px;
+        }
+
+        .sidebar.collapsed .logo {
+            display: none;
+        }
+
+        .sidebar.collapsed ul li a {
+            display: none;
+        }
+
+        .main.expanded {
+            margin-left: 70px;
+        }
+
+        .sidebar {
+            transition: width 0.3s ease;
+        }
+
+        .main {
+            transition: margin-left 0.3s ease;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            /* vertical alignment */
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .logo-text {
+            font-size: 22px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: white;
+            cursor: pointer;
+            line-height: 1;
+            /* prevents vertical shift */
+        }
+
+        .sidebar {
+            transition: width 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+            width: 70px;
+        }
+
+        /* Hide library text when collapsed */
+        .sidebar.collapsed .logo-text {
+            display: none;
+        }
+
+        /* Hide menu text when collapsed */
+        .sidebar.collapsed ul li a {
+            display: none;
+        }
+        .sidebar.collapsed .sidebar-header {
+    justify-content: center;
+}
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <span class="logo-text">LIBRARY</span>
+
+                <button id="toggleBtn" class="toggle-btn">
+                    ☰
+                </button>
+            </div>
+
+            <ul>
+                {% for item in menu %}
+                <li class="{% if item.endpoint == active %}active{% endif %}">
+                    <a href="{{ url_for(item.endpoint) }}" style="color:white;text-decoration:none;">
+                        {{ item.name }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </aside>
+
+        <!-- MAIN -->
+        <main class="main">
+
+            <!-- TOPBAR -->
+            <div class="topbar">
+
+                <!-- LEFT SIDE -->
+                <div style="display:flex; align-items:center; gap:15px;">
+                    <!-- <button id="toggleBtn" style="background:none;border:none;font-size:22px;cursor:pointer;">
+                        ☰
+                    </button> -->
+
+                    <h3>{{ page_title }}</h3>
+                </div>
+
+                <!-- RIGHT SIDE (ADD PROFILE DROPDOWN HERE) -->
+                <div style="display:flex; align-items:center; gap:15px; position:relative;">
+
+                    <span>Welcome, {{ role }}</span>
+
+                    <div style="position:relative;">
+                        <img src="{{ profile_image }}" class="profile" id="profileBtn">
+
+                        <div id="profileMenu" style="
+                    display:none;
+                    position:absolute;
+                    right:0;
+                    top:50px;
+                    background:white;
+                    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+                    border-radius:8px;
+                    width:150px;
+                    padding:10px 0;
+                ">
+                            <a href="#" style="display:block;padding:10px;text-decoration:none;color:black;">
+                                My Profile
+                            </a>
+                            <a href="/logout" style="display:block;padding:10px;text-decoration:none;color:red;">
+                                Logout
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- BREADCRUMB (OUTSIDE TOPBAR) -->
+            <div style="margin-bottom:15px;color:#6b7280;font-size:14px;">
+                {% if breadcrumb %}
+                {{ breadcrumb }}
+                {% endif %}
+            </div>
+
+            <!-- PAGE CONTENT -->
+            {% block content %}
+            {% endblock %}
+
+        </main>
+
+    </div>
+    <script>
+        const toggleBtn = document.getElementById("toggleBtn");
+        const sidebar = document.querySelector(".sidebar");
+        const main = document.querySelector(".main");
+
+        toggleBtn.addEventListener("click", () => {
+            sidebar.classList.toggle("collapsed");
+        });
+        const profileBtn = document.getElementById("profileBtn");
+        const profileMenu = document.getElementById("profileMenu");
+
+        profileBtn.addEventListener("click", () => {
+            profileMenu.style.display =
+                profileMenu.style.display === "block" ? "none" : "block";
+        });
+
+        window.addEventListener("click", function (e) {
+            if (!profileBtn.contains(e.target) && !profileMenu.contains(e.target)) {
+                profileMenu.style.display = "none";
+            }
+        });
+    </script>
+</body>
+
+</html>

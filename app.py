@@ -12,7 +12,7 @@ import bcrypt
 import razorpay
 import razorpay.errors
 
-from database import get_connection
+from database import get_connection, init_db
 from config import RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET
 
 def login_required(role=None):
@@ -31,7 +31,7 @@ def login_required(role=None):
 
 
 app = Flask(__name__)
-
+init_db()
  # used for sessions
 
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
@@ -144,7 +144,8 @@ def add_book():
         conn.commit()
         conn.close()
 
-        return "Book added successfully!"
+        # return "Book added successfully!"
+        return render_template("add_book.html", msg="Book added successfully!")
 
     return render_template("add_book.html")
 

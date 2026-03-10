@@ -4,7 +4,7 @@
 
 {% block content %}
 <h2>Add Book</h2>
-
+       
 <form method="POST">
     <input type="text" name="name" placeholder="Book Name" required><br><br>
     <input type="text" name="author" placeholder="Author" required><br><br>
@@ -22,5 +22,8 @@
     <input type="number" name="copies" placeholder="Copies" required><br><br>
 
     <button type="submit">Add Book</button>
+       {% if msg %}
+          <div class="msg-div"><p class="msg">{{ msg }}</p></div>
+        {% endif %}
 </form>
 {% endblock %}
